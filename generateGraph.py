@@ -17,3 +17,18 @@ def generate_graph(cities, distances):
     nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=16)
     plt.savefig('graph.png')
 
+## generate graph from cities and costs (list, list)
+def generate_path(path, total_cost):
+    G = nx.Graph()
+    for city in path:
+        G.add_node(city)
+    for i in range(len(path)-1):
+        G.add_edge(path[i], path[i+1])
+
+    # Draw the graph using Matplotlib
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos, with_labels=True, node_size=500, font_size=20, font_weight='bold')
+    labels = nx.get_edge_attributes(G, 'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=16)
+    plt.savefig('path.png')
+
