@@ -18,7 +18,7 @@ def generate_graph(cities, distances):
     plt.savefig('graph.png')
 
 ## generate graph from cities and costs (list, list)
-def generate_path(path, total_cost):
+def generate_path(path):
     G = nx.Graph()
     for city in path:
         G.add_node(city)
