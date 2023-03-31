@@ -1,7 +1,9 @@
 from generateGraph import generate_graph, generate_path
-from graph import cities, distances
+from graph import cities, generate_adjacent_list
 import random
 import time
+
+distances = generate_adjacent_list()
 
 ## "Traveling Salesman Problem solved with beam search algorithm"
 
@@ -30,7 +32,7 @@ def beam_search(cities, beam_size):
     return paths[0], distance(paths[0])
 
 start_time = time.time()
-found_path, found_total_distance = beam_search(cities, 50)
+found_path, found_total_distance = beam_search(cities, 200)
 end_time = time.time()
 
 print ("Found path: ", found_path)

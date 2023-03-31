@@ -1,5 +1,5 @@
 from generateGraph import generate_graph
-from graph import cities, distances
+from graph import cities, generate_adjacent_list
 import time
 import random
 
@@ -8,8 +8,8 @@ import random
 ## Mutation
 ## Select survivors
 
-generations = 25
-population_size = 25
+generations = 500
+population_size = 500
 mutation_rate = 0.05
 crossover_rate = 0.8
 
@@ -17,6 +17,7 @@ population = []
 ## initialize biggest int
 
 mean_fitnes = 0
+distances = generate_adjacent_list()
 
 class Individual:
     def __init__(self, path, fitness):
@@ -50,7 +51,7 @@ def initialize_population():
 def distance(path):
     return sum([distances[path[i]][path[i+1]] for i in range(len(path)-1)])
 
-## Aleatório 
+## Aleatório troca posição de um gene/cidade
 def mutation(path):
     
     idx1, idx2 = random.sample(range(len(cities) - 2), 2)
@@ -63,6 +64,7 @@ def mutation(path):
 def determine_fitness(path):
     return 1 / distance(path)
 
+## Retorna dois filhos que são combinações aleatórias dos pais
 def crossover(parent1, parent2):
     point_1, point_2 = random.sample(range(0, len(parent1)-1), 2)
     begin = min(point_1, point_2)
@@ -80,11 +82,6 @@ def crossover(parent1, parent2):
     offspring_1.append(offspring_1[0])
 
     offspring_2.append(offspring_2[0])
-
-    # print("Parent 1: ", parent1)
-    # print("Parent 2: ", parent2)
-    # print("Offspring: ", offspring_1)
-    # print()
 
     return offspring_1, offspring_2
 
@@ -123,9 +120,9 @@ def genetic_algorithm(generations):
 
 mean_dist = 0
 
-for i in range(25):
+for i in range(1):
     print("Execução: ", i)
     mean_dist += genetic_algorithm(generations)
 
-print("Distancia média: ", mean_dist/25) 
+print("Distancia média: ", mean_dist) 
 
