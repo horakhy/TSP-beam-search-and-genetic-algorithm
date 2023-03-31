@@ -1,5 +1,6 @@
 
 import matplotlib.pyplot as plt
+from graph import cities, distances
 import networkx as nx
 
 def generate_graph(cities, distances):
@@ -12,9 +13,9 @@ def generate_graph(cities, distances):
 
     # Draw the graph using Matplotlib
     pos = nx.spring_layout(G)
-    nx.draw(G, pos, with_labels=True, node_size=500, font_size=20, font_weight='bold')
+    nx.draw(G, pos, with_labels=True, node_size=100, font_size=15, font_weight='bold')
     labels = nx.get_edge_attributes(G, 'weight')
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=16)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=2)
     plt.savefig('graph.png')
 
 ## generate graph from cities and costs (list, list)
@@ -32,3 +33,4 @@ def generate_path(path):
     nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=16)
     plt.savefig('path.png')
 
+generate_graph(cities, distances)

@@ -8,10 +8,10 @@ import random
 ## Mutation
 ## Select survivors
 
-generations = 50
-population_size = 50
-mutation_rate = 0.1
-crossover_rate = 0.9
+generations = 25
+population_size = 25
+mutation_rate = 0.05
+crossover_rate = 0.8
 
 population = []
 ## initialize biggest int
@@ -33,17 +33,16 @@ class Individual:
         return self.fitness > other.fitness
 
 def initialize_population():
-    #print("Initializing population...")
     global population
     population = []
 
     for _ in range(population_size):
-        cities = list(distances)
-        random.shuffle(cities)
+        path = list(distances)
+        random.shuffle(path)
         
-        cities.append(cities[0])
+        path.append(path[0])
         
-        population.append(Individual(cities, determine_fitness(cities)))
+        population.append(Individual(path, determine_fitness(path)))
         
     return population
 
@@ -54,50 +53,40 @@ def distance(path):
 ## Aleatório 
 def mutation(path):
     
-    idx1, idx2 = random.sample(range(len(cities)), 2)
-    # print (idx1,idx2)
+    idx1, idx2 = random.sample(range(len(cities) - 2), 2)
+
     path[idx1], path[idx2] = path[idx2], path[idx1]
-    
+
     return path
 
 ## Menor caminho
 def determine_fitness(path):
     return 1 / distance(path)
 
-## Seleciona os melhores caminhos e faz troca entre eles
 def crossover(parent1, parent2):
-    n = len(parent1)
-    a = random.randint(0, n-1)
-    b = random.randint(0, n-1)
-    if a > b:
-        a, b = b, a
-    
-    # Copy subset of parent1 into offspring
-    offspring = [-1] * n
-    offspring[a:b+1] = parent1[a:b+1]
+    point_1, point_2 = random.sample(range(0, len(parent1)-1), 2)
+    begin = min(point_1, point_2)
+    end = max(point_1, point_2)
 
-    # print("Offspring First: ", offspring)
-    # print()
-    
-    # Add remaining genes from parent2
-    index = b+1
-    for i in range(n):
-        if index == n:
-            index = 0
-        if parent2[i] not in offspring:
-            offspring[index] = parent2[i]
-            index += 1
-        # print("Offspring in process: ", offspring)
-        # print()
-    if(-1 in offspring):
-        offspring[offspring.index(-1)] =  offspring[-1] if offspring[-1] != -1 else offspring[0]
-    offspring[-1] = offspring[0]
-    
+    offspring_1 = parent1[begin:end+1]
+    offspring_2 = parent2[begin:end+1]
+
+    offspring_1_remain = [item for item in parent2[0:-1] if item not in offspring_1]
+    offspring_2_remain = [item for item in parent1[0:-1] if item not in offspring_2]
+
+    offspring_1 += offspring_1_remain
+    offspring_2 += offspring_2_remain
+
+    offspring_1.append(offspring_1[0])
+
+    offspring_2.append(offspring_2[0])
+
     # print("Parent 1: ", parent1)
     # print("Parent 2: ", parent2)
-    # print("Offspring: ", offspring)
+    # print("Offspring: ", offspring_1)
+    # print()
 
-    return offspring
+    return offspring_1, offspring_2
 
 def update_population():
     global population
@@ -112,15 +101,13 @@ def genetic_algorithm(generations):
         for index in range(len(population)):
             if index == 0:
                 continue
-            # if random.random() < mutation_rate:
-            #     individual.path = mutation(individual.path)
-            #     individual.fitness = determine_fitness(individual.path)
             
             if random.random() * population[index].fitness < crossover_rate:
-                offspring = crossover(population[index - 1].path, population[index].path)
-                population.append(Individual(offspring, determine_fitness(offspring)))
+                offspring_1, offspring_2 = crossover(population[index - 1].path, population[index].path)
+                population.append(Individual(offspring_1, determine_fitness(offspring_1)))
+                population.append(Individual(offspring_2, determine_fitness(offspring_2)))
             
-            if random.random() < mutation_rate and distance(population[index].path) > distance:
+            if random.random() < mutation_rate:
                 population[index].path = mutation(population[index].path)
                 population[index].fitness = determine_fitness(population[index].path)
 
@@ -128,15 +115,17 @@ def genetic_algorithm(generations):
             
             # print("Fitness do melhor: ", population[0].fitness)
     
+    print("Melhor: ", population[0].path)
     print("Distancia do melhor: ", distance(population[0].path))
     print("Distancia População inicial: ", distance(initial_population[0].path))
+    print()
     return distance(population[0].path)
 
 mean_dist = 0
 
-for i in range(100):
+for i in range(25):
     print("Execução: ", i)
     mean_dist += genetic_algorithm(generations)
 
-print("Distancia média: ", mean_dist/100) 
+print("Distancia média: ", mean_dist/25) 
 
