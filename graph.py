@@ -1,6 +1,6 @@
 import random
 
-## 10 cities
+## 52 cities
 cities = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','AA', 'BB', 'CC', 'DD', 'EE', 'FF', 'GG', 'HH', 'II', 'JJ', 'KK', 'LL', 'MM', 'NN', 'OO', 'PP', 'QQ', 'RR', 'SS', 'TT', 'UU', 'VV', 'WW', 'XX', 'YY', 'ZZ']
 
 distances = {
@@ -32,9 +32,7 @@ distances = {
     'Z': {'A': 1, 'B': 8, 'C': 6, 'D': 8, 'E': 9, 'F': 7, 'G': 5, 'H': 3, 'I': 9, 'J': 2, 'K': 6, 'L': 3, 'M': 10, 'N': 10, 'O': 12, 'P': 8, 'Q': 6, 'R': 9, 'S': 10, 'T': 8, 'U': 11, 'V': 12, 'W': 10, 'X': 13, 'Y': 14}
 }
 
-
 def generate_adjacent_list():
-
     # Create an empty adjacency list
     distances = {node: {} for node in cities}
 
@@ -46,3 +44,4 @@ def generate_adjacent_list():
             distances[cities[j]][cities[i]] = distance
 
     return distances
+

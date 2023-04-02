@@ -9,9 +9,10 @@ import random
 ## Select survivors
 
 generations = 500
-population_size = 500
-mutation_rate = 0.05
-crossover_rate = 0.8
+population_size = 200
+mutation_rate = 0.01
+crossover_rate = 0.85
+reproduction_quocient = int(0.75 * population_size)
 
 population = []
 ## initialize biggest int
@@ -26,12 +27,6 @@ class Individual:
 
     def __repr__(self):
         return f"Individual({self.path}, {self.fitness})\n"
-
-    def __lt__(self, other):
-        return self.fitness < other.fitness
-
-    def __gt__(self, other):
-        return self.fitness > other.fitness
 
 def initialize_population():
     global population
@@ -90,16 +85,24 @@ def update_population():
     population.sort(key=lambda individual: individual.fitness, reverse=True)
     population = population[:population_size]
 
-def genetic_algorithm(generations):
+def genetic_algorithm(generations, distances_test):
+    global distances
+    distances = distances_test
+
     initial_population = initialize_population()
     initial_population.sort(key=lambda individual: individual.fitness, reverse=True)
     
     for _ in range(generations):
+       
         for index in range(len(population)):
             if index == 0:
                 continue
             
-            if random.random() * population[index].fitness < crossover_rate:
+            ## Only 75% of the population can reproduce and mutate
+            # if index == reproduction_quocient:
+            #     break;
+            
+            if random.random() < crossover_rate:
                 offspring_1, offspring_2 = crossover(population[index - 1].path, population[index].path)
                 population.append(Individual(offspring_1, determine_fitness(offspring_1)))
                 population.append(Individual(offspring_2, determine_fitness(offspring_2)))
@@ -118,11 +121,15 @@ def genetic_algorithm(generations):
     print()
     return distance(population[0].path)
 
-mean_dist = 0
+# mean_dist = 0
 
-for i in range(1):
-    print("Execução: ", i)
-    mean_dist += genetic_algorithm(generations)
+# for i in range(10):
+#     print("Execução: ", i)
+#     start_time = time.time()
+#     mean_dist += genetic_algorithm(generations)
+#     end_time = time.time()
+#     mean_time = (end_time - start_time)
 
-print("Distancia média: ", mean_dist) 
+# print("Distancia média: ", mean_dist/10) 
+# print("Tempo médio de execução: ", mean_time/10)
 

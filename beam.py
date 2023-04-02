@@ -3,15 +3,17 @@ from graph import cities, generate_adjacent_list
 import random
 import time
 
-distances = generate_adjacent_list()
+distances = []
 
 ## "Traveling Salesman Problem solved with beam search algorithm"
 
 def distance(path):
     return sum([distances[path[i]][path[i+1]] for i in range(len(path)-1)])
 
-def beam_search(cities, beam_size):
+def beam_search(cities, distances_test,  beam_size):
     paths = [[city] for city in cities]
+    global distances
+    distances = distances_test
     # print("Paths: ", paths)
 
     while len(paths[0]) < len(cities):
@@ -31,15 +33,17 @@ def beam_search(cities, beam_size):
 
     return paths[0], distance(paths[0])
 
-start_time = time.time()
-found_path, found_total_distance = beam_search(cities, 200)
-end_time = time.time()
+# generate_path(found_path, found_total_distance)
 
-print ("Found path: ", found_path)
-print ("Found total distance: ", found_total_distance)
-print (f"Time taken: {end_time - start_time} s", )
+# start_time = time.time()
+# found_path, found_total_distance = beam_search(cities, 200)
+# end_time = time.time()
 
-generate_graph(cities, distances)
+# print ("Found path: ", found_path)
+# print ("Found total distance: ", found_total_distance)
+# print (f"Time taken: {end_time - start_time} s", )
+
+# generate_graph(cities, distances)
 # generate_path(found_path, found_total_distance)
 
 
