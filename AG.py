@@ -49,7 +49,7 @@ def distance(path):
 ## Aleatório troca posição de um gene/cidade
 def mutation(path):
     
-    idx1, idx2 = random.sample(range(len(cities) - 2), 2)
+    idx1, idx2 = random.sample(range(1,len(cities) - 2), 2)
 
     path[idx1], path[idx2] = path[idx2], path[idx1]
 
